@@ -1,10 +1,20 @@
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import Header from './components/header';
+import Home from './pages/home';
+import AddNewBlog from './pages/addBlog';
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world! I am a React app. I am running on port 3000.
-    </h1>
+    <div>
+      <Header />
+      <Routes>
+        <Route>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/addBlog" element={<AddNewBlog />} />
+        </Route>
+      </Routes>
+    </div>
   );
 }
 
