@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context";
-
+import axios from "axios";
 export default function AddNewBlog() {
 
     const { formData, setFormData } = useContext(GlobalContext);
