@@ -1,38 +1,62 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GlobalContext } from "../../context";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function AddNewBlog() {
-
-    const { formData, setFormData } = useContext(GlobalContext);
+    const { formData, setFormData, setIsEdit, isEdit } = useContext(GlobalContext);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    console.log(formData);
+    useEffect(() => {
+        if (location.state?.getCurrentBlogItem) {
+            const { getCurrentBlogItem } = location.state;
+            setIsEdit(true);
+            setFormData({
+                title: getCurrentBlogItem.title || "",
+                description: getCurrentBlogItem.description || "",
+            });
+        } else {
+            // If no data is passed, reset state to avoid carrying over edit state
+            setIsEdit(false);
+            setFormData({ title: "", description: "" });
+        }
+    }, [location.state]); // Depend only on location.state
 
     async function handleSaveBlogToDB() {
-        const response = await axios.post("http://localhost:5000/api/blogs/add", {
-            title: formData.title,
-            description: formData.description,
-        });
+        try {
+            const response = isEdit
+                ? await axios.put(
+                    `http://localhost:5000/api/blogs/update/${location.state?.getCurrentBlogItem?._id}`,
+                    {
+                        title: formData.title,
+                        description: formData.description,
+                    }
+                )
+                : await axios.post("http://localhost:5000/api/blogs/add", {
+                    title: formData.title,
+                    description: formData.description,
+                });
 
-        const result = await response.data;
-
-        console.log(result);
-
-        if (result) {
-            setFormData({
-                title: "",
-                description: ""
-            });
-            navigate("/");
+            const result = response.data;
+            if (result) {
+                setIsEdit(false);
+                setFormData({
+                    title: "",
+                    description: "",
+                });
+                navigate("/");
+            }
+        } catch (error) {
+            console.error("Error saving blog:", error);
         }
     }
 
     return (
         <div className="p-6 bg-gray-100 shadow-md max-w-lg mx-auto mt-8 rounded-lg">
-            <h1 className="text-2xl font-bold mb-4 text-gray-800">Add A Blog</h1>
+            <h1 className="text-2xl font-bold mb-4 text-gray-800">
+                {isEdit ? "Edit Blog" : "Add a Blog"}
+            </h1>
 
             <div className="flex flex-col space-y-4">
                 <input
@@ -57,7 +81,7 @@ export default function AddNewBlog() {
                     onClick={handleSaveBlogToDB}
                     className="mt-4 bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-900 transition"
                 >
-                    Add New Blog
+                    {isEdit ? "Edit Blog" : "Add Blog"}
                 </button>
             </div>
         </div>
