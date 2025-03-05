@@ -5,17 +5,15 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import ConfirmModal from "../../components/modal"; // Import the modal
 import { useNavigate } from "react-router-dom";
 
-const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
-
 export default function Home() {
-    const { blogList, setBlogList, pending, setPending, isEdit, setIsEdit } = useContext(GlobalContext);
+    const { blogList, setBlogList, pending, setPending, isEdit, setIsEdit, } = useContext(GlobalContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentBlogId, setCurrentBlogId] = useState(null);
 
     async function fetchListOfBlogs() {
         setPending(true);
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/blogs`);
+            const response = await axios.get("http://localhost:5000/api/blogs");
             setBlogList(response.data.blogList || []);
         } catch (error) {
             console.error("Error fetching blogs:", error);
@@ -37,7 +35,7 @@ export default function Home() {
 
     async function handleDeleteBlog() {
         try {
-            await axios.delete(`${API_BASE_URL}/api/blogs/delete/${currentBlogId}`);
+            await axios.delete(`http://localhost:5000/api/blogs/delete/${currentBlogId}`);
             setIsModalOpen(false);
             await fetchListOfBlogs();
         } catch (error) {
