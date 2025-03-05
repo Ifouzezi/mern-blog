@@ -1,5 +1,7 @@
+// blogController.js
+
 const mongoose = require("mongoose");
-// const Blog = require("../model/Blog");
+const Blog = require("../model/blog");
 
 //fetch list of blogs
 //add a new blog

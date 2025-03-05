@@ -1,13 +1,34 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
 export default function AddNewBlog() {
 
     const { formData, setFormData } = useContext(GlobalContext);
+    const navigate = useNavigate();
 
     console.log(formData);
 
-    async function handleSaveBlogToDB() {}
+    async function handleSaveBlogToDB() {
+        const response = await axios.post("http://localhost:5000/api/blogs/add", {
+            title: formData.title,
+            description: formData.description,
+        });
+
+        const result = await response.data;
+
+        console.log(result);
+
+        if (result) {
+            setFormData({
+                title: "",
+                description: ""
+            });
+            navigate("/");
+        }
+    }
 
     return (
         <div className="p-6 bg-gray-100 shadow-md max-w-lg mx-auto mt-8 rounded-lg">

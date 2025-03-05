@@ -8,17 +8,17 @@ export default function GlobalState({ children }) {
     description: "",
   });
 
-  //   const [blogList, setBlogList] = useState([]);
-  //   const [pending, setPending] = useState(false);
+  const [blogList, setBlogList] = useState([]);
+  const [pending, setPending] = useState(false);
   //   const [isEdit, setIsEdit] = useState(false);
 
   return (
     <GlobalContext.Provider
       value={{
-        //     blogList,
-        //     setBlogList,
-        //     pending,
-        //     setPending,
+        blogList,
+        setBlogList,
+        pending,
+        setPending,
         formData,
         setFormData,
         //     isEdit,
