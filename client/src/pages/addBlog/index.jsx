@@ -3,6 +3,8 @@ import { GlobalContext } from "../../context";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
 export default function AddNewBlog() {
     const { formData, setFormData, setIsEdit, isEdit } = useContext(GlobalContext);
     const navigate = useNavigate();
@@ -27,17 +29,17 @@ export default function AddNewBlog() {
         try {
             const response = isEdit
                 ? await axios.put(
-                    `http://localhost:5000/api/blogs/update/${location.state?.getCurrentBlogItem?._id}`,
+                    `${API_BASE_URL}/api/blogs/update/${location.state?.getCurrentBlogItem?._id}`,
                     {
                         title: formData.title,
                         description: formData.description,
                     }
                 )
-                : await axios.post("http://localhost:5000/api/blogs/add", {
+                : await axios.post(`${API_BASE_URL}/api/blogs/add`, {
                     title: formData.title,
                     description: formData.description,
                 });
-
+    
             const result = response.data;
             if (result) {
                 setIsEdit(false);
