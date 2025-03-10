@@ -6,15 +6,14 @@ import ConfirmModal from "../../components/modal"; // Import the modal
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-    const { blogList, setBlogList, pending, setPending, isEdit, setIsEdit } = useContext(GlobalContext);
+    const { blogList, setBlogList, pending, setPending, isEdit, setIsEdit, } = useContext(GlobalContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentBlogId, setCurrentBlogId] = useState(null);
 
     async function fetchListOfBlogs() {
         setPending(true);
         try {
-            // Updated API endpoint to use production URL
-            const response = await axios.get("https://mern-blogga.vercel.app/api/blogs");
+            const response = await axios.get("http://localhost:5000/api/blogs");
             setBlogList(response.data.blogList || []);
         } catch (error) {
             console.error("Error fetching blogs:", error);
@@ -36,8 +35,7 @@ export default function Home() {
 
     async function handleDeleteBlog() {
         try {
-            // Updated API endpoint for deleting a blog to use production URL
-            await axios.delete(`https://mern-blogga.vercel.app/api/blogs/delete/${currentBlogId}`);
+            await axios.delete(`http://localhost:5000/api/blogs/delete/${currentBlogId}`);
             setIsModalOpen(false);
             await fetchListOfBlogs();
         } catch (error) {
