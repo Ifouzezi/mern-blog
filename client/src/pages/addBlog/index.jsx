@@ -27,13 +27,13 @@ export default function AddNewBlog() {
         try {
             const response = isEdit
                 ? await axios.put(
-                    `http://localhost:5000/api/blogs/update/${location.state?.getCurrentBlogItem?._id}`,
+                    `https://mern-blogga.vercel.app/api/blogs/update/${location.state?.getCurrentBlogItem?._id}`,
                     {
                         title: formData.title,
                         description: formData.description,
                     }
                 )
-                : await axios.post("http://localhost:5000/api/blogs/add", {
+                : await axios.post("https://mern-blogga.vercel.app/api/blogs/add", {
                     title: formData.title,
                     description: formData.description,
                 });
